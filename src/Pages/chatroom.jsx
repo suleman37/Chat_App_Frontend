@@ -27,7 +27,7 @@ const ChatUI = () => {
   };
 
   return (
-    <div className="w-full bg-white rounded-2xl shadow-lg flex flex-col h-[95vh]">
+    <div className="w-full bg-white rounded-2xl shadow-lg flex flex-col h-[100vh]">
       <div className="flex items-center gap-3 px-4 py-3 border-b">
         <img
           src="https://randomuser.me/api/portraits/men/75.jpg"
@@ -48,11 +48,10 @@ const ChatUI = () => {
             className={`flex ${msg.from === 'me' ? 'justify-end' : 'justify-start'}`}
           >
             <div
-              className={`px-4 py-2 rounded-2xl max-w-[70%] text-sm ${
-                msg.from === 'me'
+              className={`px-4 py-2 rounded-2xl max-w-[70%] text-sm ${msg.from === 'me'
                   ? 'bg-blue-500 text-white rounded-br-none'
                   : 'bg-gray-200 text-gray-900 rounded-bl-none'
-              }`}
+                }`}
             >
               {msg.text}
             </div>
@@ -64,7 +63,7 @@ const ChatUI = () => {
         <input
           type="text"
           placeholder="Type a message"
-          className="flex-1 p-2 rounded-full border bg-gray-100 focus:outline-none"
+          className="flex-1 p-2 pl-10 rounded-full border bg-gray-100 focus:outline-none"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
         />

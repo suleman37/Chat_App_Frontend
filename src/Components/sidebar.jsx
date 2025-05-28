@@ -1,44 +1,87 @@
-import React from "react";
-import { FaTruck, FaMapMarkedAlt, FaChartLine, FaWarehouse, FaUserTie, FaSignOutAlt } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import User_img from "../assets/empty-user.jpg"
 
-const menuItems = [
-  { title: "Dashboard", icon: <FaChartLine />, route: "/dashboard" },
-  { title: "Trucks", icon: <FaTruck />, route: "/vehicles" },
-  { title: "Warehouses", icon: <FaWarehouse />, route: "/warehouses" },
-  { title: "Geo Locations", icon: <FaMapMarkedAlt />, route: "/geo-locations" },
-  { title: "Managers", icon: <FaUserTie />, route: "/managers" },
-];
+const MessageSidebar = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [chats, setChats] = useState([]);
 
-function Sidebar() {
+  useEffect(() => {
+    const fetchChats = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/users');
+        const data = await response.json();
+        const formattedChats = data.map(user => ({
+          name: user.username,
+          msg: 'No message available',
+          time: 'N/A',
+          tags: [],
+          img: User_img, // Corrected the image assignment
+        }));
+        setChats(formattedChats);
+      } catch (error) {
+        console.error('Error fetching chats:', error);
+      }
+    };
+
+    fetchChats();
+  }, []);
+
+  const filteredChats = chats.filter(chat =>
+    chat.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <div className="h-screen w-64 bg-blue-600 text-white p-4 flex flex-col justify-between" style={{borderRadius:"20px"}}>
-      <div>
-        <div className="flex items-center gap-3 mb-6">
-          <img
-            src="https://via.placeholder.com/40"
-            alt="Logo"
-            className="w-10 h-10 rounded"
-          />
-          <div>
-            <h2 className="text-sm font-bold">LogisticsPro</h2>
-            <p className="text-xs text-gray-200">FOR ADMIN</p>
-          </div>
-        </div>
-        <nav className="space-y-2">
-          {menuItems.map((item, index) => (
-            <Link to={item.route} key={index} className="flex items-center gap-2 text-sm py-2 px-3 hover:bg-blue-500 rounded cursor-pointer">
-              <span className="text-lg">{item.icon}</span>
-              <span>{item.title}</span>
-            </Link>
-          ))}
-        </nav>
+    <div className="w-full max-w-xs h-screen border-r bg-white">
+      <div className="p-5 border-b flex justify-between items-center">
+        <h2 className="text-lg font-semibold">Messages</h2>
+        <button className="text-blue-500 text-xl">+</button>
       </div>
-      <button className="w-full flex items-center justify-center gap-2 py-2 text-sm bg-blue-500 hover:bg-blue-400 rounded">
-        <FaSignOutAlt /> Log out
-      </button>
+
+      <div className="px-4 py-2">
+        <input
+          type="text"
+          placeholder="search"
+          className="w-full p-2 rounded-md border bg-gray-100 focus:outline-none"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+      </div>
+
+      <div className="overflow-y-auto h-[calc(100vh-128px)] scrollbar-thin scrollbar-thumb-transparent scrollbar-track-transparent" >
+        {filteredChats.map((chat, index) => (
+          <div
+            key={index}
+            className={`flex items-start gap-3 px-4 py-3 cursor-pointer hover:bg-gray-100 ${
+              chat.active ? 'bg-blue-50 rounded-md' : ''
+            }`}
+          >
+            <img
+              src={chat.img}
+              alt={chat.name}
+              className="w-10 h-10 rounded-full object-cover"
+            />
+            <div className="flex-1">
+              <div className="flex justify-between items-center">
+                <h4 className="font-semibold text-sm">{chat.name}</h4>
+                <span className="text-xs text-gray-500">{chat.time}</span>
+              </div>
+              <p className="text-sm text-gray-600 truncate">{chat.msg}</p>
+              <div className="flex flex-wrap gap-1 mt-1">
+                {chat.tags.map((tag, i) => (
+                  <span
+                    key={i}
+                    className="text-xs px-2 py-0.5 bg-gray-200 rounded-full text-gray-700"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
-}
+};
 
-export default Sidebar;
+export default MessageSidebar;

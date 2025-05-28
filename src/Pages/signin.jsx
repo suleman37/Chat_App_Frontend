@@ -19,7 +19,9 @@ const SignIn = ({ formData, onChange }) => {
             console.log("Response Data:", data);
 
             if (response.ok) {
-                toast.success("Login successful!");
+                toast.success("Login successful!", {
+                    onClose: () => navigate("/chat")
+                });
                 localStorage.setItem("token", data.token);
             } else {
                 toast.error(data.message || "Login failed!");
