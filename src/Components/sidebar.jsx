@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import User_img from "../assets/empty-user.jpg"
 
-const MessageSidebar = () => {
+const MessageSidebar = ({ onChatSelect }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [chats, setChats] = useState([]);
 
@@ -12,10 +12,11 @@ const MessageSidebar = () => {
         const data = await response.json();
         const formattedChats = data.map(user => ({
           name: user.username,
+          id: user._id,
           msg: 'No message available',
           time: 'N/A',
           tags: [],
-          img: User_img, // Corrected the image assignment
+          img: User_img,
         }));
         setChats(formattedChats);
       } catch (error) {
@@ -29,6 +30,11 @@ const MessageSidebar = () => {
   const filteredChats = chats.filter(chat =>
     chat.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleChatClick = (chat) => {
+    console.log('Chat clicked:', chat);
+    onChatSelect(chat);
+  };
 
   return (
     <div className="w-full max-w-xs h-screen border-r bg-white">
@@ -51,9 +57,9 @@ const MessageSidebar = () => {
         {filteredChats.map((chat, index) => (
           <div
             key={index}
-            className={`flex items-start gap-3 px-4 py-3 cursor-pointer hover:bg-gray-100 ${
-              chat.active ? 'bg-blue-50 rounded-md' : ''
-            }`}
+            className={`flex items-start gap-3 px-4 py-3 cursor-pointer hover:bg-gray-100 ${chat.active ? 'bg-blue-50 rounded-md' : ''
+              }`}
+            onClick={() => handleChatClick(chat)}
           >
             <img
               src={chat.img}

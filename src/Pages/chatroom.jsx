@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const initialMessages = [
   { from: 'them', text: 'omg, this is amazing' },
@@ -15,9 +15,33 @@ const initialMessages = [
   { from: 'them', text: 'wohooooo 🔥' },
 ];
 
-const ChatUI = () => {
+const ChatUI = ({ user }) => {
   const [messages, setMessages] = useState(initialMessages);
   const [newMessage, setNewMessage] = useState('');
+  const [token, setToken] = useState(null);
+
+  useEffect(() => {
+    console.log("Selected user DATA:", user);
+  }, [user]);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    setToken(storedToken);
+    console.log('Token from localStorage:', storedToken);
+
+    if (storedToken) {
+      try {
+        const base64Url = storedToken.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        console.log('Decoded token data:', JSON.parse(jsonPayload));
+      } catch (error) {
+        console.error('Error decoding token:', error);
+      }
+    }
+  }, []);
 
   const handleSendMessage = () => {
     if (newMessage.trim() !== '') {
