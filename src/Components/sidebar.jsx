@@ -32,7 +32,6 @@ const MessageSidebar = ({ onChatSelect }) => {
   );
 
   const handleChatClick = (chat) => {
-    console.log('Chat clicked:', chat);
     onChatSelect(chat);
   };
 

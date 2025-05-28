@@ -19,6 +19,7 @@ const ChatUI = ({ user }) => {
   const [messages, setMessages] = useState(initialMessages);
   const [newMessage, setNewMessage] = useState('');
   const [token, setToken] = useState(null);
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
     console.log("Selected user DATA:", user);
@@ -27,26 +28,50 @@ const ChatUI = ({ user }) => {
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
     setToken(storedToken);
-    console.log('Token from localStorage:', storedToken);
 
     if (storedToken) {
       try {
         const base64Url = storedToken.split('.')[1];
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
           return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
         }).join(''));
-        console.log('Decoded token data:', JSON.parse(jsonPayload));
+        const decodedData = JSON.parse(jsonPayload);
+        setUserId(decodedData.user_id);
       } catch (error) {
         console.error('Error decoding token:', error);
       }
     }
   }, []);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (newMessage.trim() !== '') {
-      setMessages([...messages, { from: 'me', text: newMessage }]);
-      setNewMessage('');
+      const messageData = {
+        sender: userId,
+        receiver: user.id,
+        chatRoomId: 'chatroom789',
+        content: newMessage
+      };
+
+      try {
+        const response = await fetch('http://localhost:8000/message', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(messageData)
+        });
+
+        if (response.ok) {
+          setMessages([...messages, { from: 'me', text: newMessage }]);
+          setNewMessage('');
+        } else {
+          console.error('Failed to send message:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error sending message:', error);
+      }
     }
   };
 
@@ -54,12 +79,12 @@ const ChatUI = ({ user }) => {
     <div className="w-full bg-white rounded-2xl shadow-lg flex flex-col h-[100vh]">
       <div className="flex items-center gap-3 px-4 py-3 border-b">
         <img
-          src="https://randomuser.me/api/portraits/men/75.jpg"
-          alt="Profile"
+          src={user?.img || "https://randomuser.me/api/portraits/men/75.jpg"}
+          alt={user?.name || "Profile"}
           className="w-10 h-10 rounded-full"
         />
         <div>
-          <h2 className="font-semibold">Florencio Dorrance</h2>
+          <h2 className="font-semibold">{user?.name || "Florencio Dorrance"}</h2>
           <p className="text-green-500 text-sm">Online</p>
         </div>
         <div className="ml-auto text-blue-500 text-xl">📞</div>
@@ -73,8 +98,8 @@ const ChatUI = ({ user }) => {
           >
             <div
               className={`px-4 py-2 rounded-2xl max-w-[70%] text-sm ${msg.from === 'me'
-                  ? 'bg-blue-500 text-white rounded-br-none'
-                  : 'bg-gray-200 text-gray-900 rounded-bl-none'
+                ? 'bg-blue-500 text-white rounded-br-none'
+                : 'bg-gray-200 text-gray-900 rounded-bl-none'
                 }`}
             >
               {msg.text}
@@ -82,7 +107,6 @@ const ChatUI = ({ user }) => {
           </div>
         ))}
       </div>
-
       <div className="p-3 border-t flex items-center gap-2">
         <input
           type="text"
