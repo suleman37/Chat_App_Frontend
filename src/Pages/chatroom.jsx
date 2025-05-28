@@ -1,22 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-const initialMessages = [
-  { from: 'them', text: 'omg, this is amazing' },
-  { from: 'them', text: 'perfect 🤑' },
-  { from: 'them', text: 'Wow, this is really epic' },
-  { from: 'me', text: 'How are you?' },
-  { from: 'them', text: 'just ideas for next time' },
-  { from: 'them', text: "I'll be there in 2 mins 🤍" },
-  { from: 'me', text: 'woohoooo' },
-  { from: 'me', text: 'Hahh oh man' },
-  { from: 'me', text: "Haha that's terrifying 😂" },
-  { from: 'them', text: 'aww' },
-  { from: 'them', text: 'omg, this is amazing' },
-  { from: 'them', text: 'wohooooo 🔥' },
-];
-
 const ChatUI = ({ user }) => {
-  const [messages, setMessages] = useState(initialMessages);
+  const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [token, setToken] = useState(null);
   const [userId, setUserId] = useState(null);
@@ -49,7 +34,7 @@ const ChatUI = ({ user }) => {
       const messageData = {
         sender: userId,
         receiver: user.id,
-        chatRoomId: 'chatroom789',
+        chatRoomId: `${userId}_${user.id}`,
         content: newMessage
       };
 
@@ -72,6 +57,12 @@ const ChatUI = ({ user }) => {
       } catch (error) {
         console.error('Error sending message:', error);
       }
+    }
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSendMessage();
     }
   };
 
@@ -114,6 +105,7 @@ const ChatUI = ({ user }) => {
           className="flex-1 p-2 pl-10 rounded-full border bg-gray-100 focus:outline-none"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
+          onKeyPress={handleKeyPress}
         />
         <button className="text-blue-600 text-xl" onClick={handleSendMessage}>➤</button>
       </div>
