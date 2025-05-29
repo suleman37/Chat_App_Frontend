@@ -29,8 +29,44 @@ const ChatUI = ({ user }) => {
     }
   }, []);
 
+  useEffect(() => {
+    const fetchMessages = async () => {
+      if (!user || !user.id) {
+        console.error('User or user.id is null');
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:8000/messages-get', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const filteredMessages = data.filter(msg => msg.chatRoomId === `${userId}_${user.id}` || msg.chatRoomId === `${user.id}_${userId}`);
+          setMessages(filteredMessages.map(msg => ({
+            from: msg.sender === userId ? 'me' : 'other',
+            text: msg.content
+          })));
+        } else {
+          console.error('Failed to fetch messages:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error fetching messages:', error);
+      }
+    };
+
+    if (token && userId) {
+      fetchMessages();
+    }
+  }, [token, userId, user]);
+
   const handleSendMessage = async () => {
-    if (newMessage.trim() !== '') {
+    if (newMessage.trim() !== '' && user && user.id) {
       const messageData = {
         sender: userId,
         receiver: user.id,
