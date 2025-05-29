@@ -55,8 +55,8 @@ const AuthForm = () => {
                 </div>
 
                 <div className="bg-blue-600 text-white flex flex-col items-center justify-center p-10">
-                    <div className="text-6xl mb-4">⚽</div>
-                    <h2 className="text-2xl font-bold mb-2">Score Ball</h2>
+                    <div className="text-6xl mb-4">🏃</div>
+                    <h2 className="text-2xl font-bold mb-2">Chat Race</h2>
                     <p className="text-sm">{isSignUp ? "Already have an account?" : "New here?"}</p>
                     <button
                         type="button"

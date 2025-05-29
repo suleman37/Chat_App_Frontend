@@ -114,7 +114,7 @@ const ChatUI = ({ user }) => {
           <h2 className="font-semibold">{user?.name || "Florencio Dorrance"}</h2>
           <p className="text-green-500 text-sm">Online</p>
         </div>
-        <div className="ml-auto text-blue-500 text-xl">📞</div>
+        <div className="ml-auto  text-xl">[➔</div>
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 py-3 space-y-2">

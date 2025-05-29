@@ -4,6 +4,24 @@ import User_img from "../assets/empty-user.jpg"
 const MessageSidebar = ({ onChatSelect }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [chats, setChats] = useState([]);
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      try {
+        const base64Url = storedToken.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        const decodedData = JSON.parse(jsonPayload);
+        setUserId(decodedData.user_id);
+      } catch (error) {
+        console.error('Error decoding token:', error);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const fetchChats = async () => {
@@ -11,7 +29,7 @@ const MessageSidebar = ({ onChatSelect }) => {
         const response = await fetch('http://localhost:8000/users');
         const data = await response.json();
         const formattedChats = data.map(user => ({
-          name: user.username,
+          name: user._id === userId ? `${user.username} (You)` : user.username,
           id: user._id,
           msg: 'No message available',
           time: 'N/A',
@@ -19,13 +37,19 @@ const MessageSidebar = ({ onChatSelect }) => {
           img: User_img,
         }));
         setChats(formattedChats);
+
+        // Automatically select the chat with "You" in the name
+        const youChat = formattedChats.find(chat => chat.name.includes('(You)'));
+        if (youChat) {
+          onChatSelect(youChat);
+        }
       } catch (error) {
         console.error('Error fetching chats:', error);
       }
     };
 
     fetchChats();
-  }, []);
+  }, [userId, onChatSelect]);
 
   const filteredChats = chats.filter(chat =>
     chat.name.toLowerCase().includes(searchTerm.toLowerCase())
