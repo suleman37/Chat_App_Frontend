@@ -106,13 +106,12 @@ const ChatUI = ({ user }) => {
     <div className="w-full bg-white rounded-2xl shadow-lg flex flex-col h-[100vh]">
       <div className="flex items-center gap-3 px-4 py-3 border-b">
         <img
-          src={user?.img || "https://randomuser.me/api/portraits/men/75.jpg"}
+          src={user?.img || "https://cdn.vectorstock.com/i/1000v/66/92/error-404-page-not-found-website-web-failure-vector-24176692.avif"}
           alt={user?.name || "Profile"}
           className="w-10 h-10 rounded-full"
         />
         <div>
-          <h2 className="font-semibold">{user?.name || "Florencio Dorrance"}</h2>
-          <p className="text-green-500 text-sm">Online</p>
+          <h2 className="font-semibold">{user?.name || "No User Registered"}</h2>
         </div>
         <div className="ml-auto  text-xl">[➔</div>
       </div>
