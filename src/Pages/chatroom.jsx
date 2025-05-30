@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const ChatUI = ({ user }) => {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
   const [token, setToken] = useState(null);
   const [userId, setUserId] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     console.log("Selected user DATA:", user);
@@ -37,7 +39,7 @@ const ChatUI = ({ user }) => {
       }
 
       try {
-        const response = await fetch('http://localhost:8000/messages-get', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/messages-get`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -75,7 +77,7 @@ const ChatUI = ({ user }) => {
       };
 
       try {
-        const response = await fetch('http://localhost:8000/message', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/message`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -102,6 +104,11 @@ const ChatUI = ({ user }) => {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/');
+  };
+
   return (
     <div className="w-full bg-white rounded-2xl shadow-lg flex flex-col h-[100vh]">
       <div className="flex items-center gap-3 px-4 py-3 border-b">
@@ -112,8 +119,9 @@ const ChatUI = ({ user }) => {
         />
         <div>
           <h2 className="font-semibold">{user?.name || "No User Registered"}</h2>
+          <p className={`text-sm ${user?.name ? 'text-green-500' : 'text-gray-500'}`}>{user?.name ? "Online" : "Offline"}</p>
         </div>
-        <div className="ml-auto  text-xl">[➔</div>
+        <div className="ml-auto text-xl cursor-pointer" onClick={handleLogout}>[➔</div>
       </div>
 
       <div className="flex-1 overflow-y-auto px-4 py-3 space-y-2">

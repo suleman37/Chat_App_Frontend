@@ -26,7 +26,7 @@ const MessageSidebar = ({ onChatSelect }) => {
   useEffect(() => {
     const fetchChats = async () => {
       try {
-        const response = await fetch('http://localhost:8000/users');
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/users`);
         const data = await response.json();
         const formattedChats = data.map(user => ({
           name: user._id === userId ? `${user.username} (You)` : user.username,

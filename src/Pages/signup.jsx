@@ -4,7 +4,7 @@ const SignUp = ({ formData, onChange }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:8000/register`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/register`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
