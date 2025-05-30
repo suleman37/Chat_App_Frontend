@@ -28,17 +28,15 @@ const MessageSidebar = ({ onChatSelect }) => {
       try {
         const response = await fetch(`${import.meta.env.VITE_API_URL}/users`);
         const data = await response.json();
-        const formattedChats = data.map(user => ({
-          name: user._id === userId ? `${user.username} (You)` : user.username,
-          id: user._id,
+        const formattedChats = data.users.map(user => ({
+          name: user.id === userId ? `${user.username} (You)` : user.username,
+          id: user.id,
           msg: 'No message available',
           time: 'N/A',
           tags: [],
           img: User_img,
         }));
         setChats(formattedChats);
-
-        // Automatically select the chat with "You" in the name
         const youChat = formattedChats.find(chat => chat.name.includes('(You)'));
         if (youChat) {
           onChatSelect(youChat);

@@ -49,7 +49,7 @@ const ChatUI = ({ user }) => {
 
         if (response.ok) {
           const data = await response.json();
-          const filteredMessages = data.filter(msg => msg.chatRoomId === `${userId}_${user.id}` || msg.chatRoomId === `${user.id}_${userId}`);
+          const filteredMessages = data.messages.filter(msg => msg.chatRoomId === `${userId}_${user.id}` || msg.chatRoomId === `${user.id}_${userId}`);
           setMessages(filteredMessages.map(msg => ({
             from: msg.sender === userId ? 'me' : 'other',
             text: msg.content
