@@ -110,8 +110,8 @@ const ChatUI = ({ user }) => {
   };
 
   return (
-    <div className="w-full bg-white rounded-2xl shadow-lg flex flex-col h-[100vh]">
-      <div className="flex items-center gap-3 px-4 py-3 border-b">
+    <div className="w-full bg-gray-800 rounded-2xl shadow-lg flex flex-col h-screen text-white">
+      <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-700 bg-gray-900">
         <img
           src={user?.img || "https://cdn.vectorstock.com/i/1000v/66/92/error-404-page-not-found-website-web-failure-vector-24176692.avif"}
           alt={user?.name || "Profile"}
@@ -124,7 +124,7 @@ const ChatUI = ({ user }) => {
         <div className="ml-auto text-xl cursor-pointer" onClick={handleLogout}>[➔</div>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-4 py-3 space-y-2">
+      <div className="flex-1 overflow-y-auto px-4 py-3 space-y-2 bg-gray-800">
         {messages.map((msg, i) => (
           <div
             key={i}
@@ -133,7 +133,7 @@ const ChatUI = ({ user }) => {
             <div
               className={`px-4 py-2 rounded-2xl max-w-[70%] text-sm ${msg.from === 'me'
                 ? 'bg-blue-500 text-white rounded-br-none'
-                : 'bg-gray-200 text-gray-900 rounded-bl-none'
+                : 'bg-gray-700 text-gray-300 rounded-bl-none'
                 }`}
             >
               {msg.text}
@@ -141,16 +141,18 @@ const ChatUI = ({ user }) => {
           </div>
         ))}
       </div>
-      <div className="p-3 border-t flex items-center gap-2">
+      <div className="p-3 border-t border-gray-700 flex items-center gap-2 bg-gray-900">
         <input
           type="text"
           placeholder="Type a message"
-          className="flex-1 p-2 pl-10 rounded-full border bg-gray-100 focus:outline-none"
+          className="flex-1 p-2 pl-10 rounded-full border bg-gray-700 text-gray-300 focus:outline-none"
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
           onKeyPress={handleKeyPress}
         />
-        <button className="text-blue-600 text-xl" onClick={handleSendMessage}>➤</button>
+        <button className="text-blue-600 text-3xl" onClick={handleSendMessage}>
+          <span className="transform rotate-120">➤</span>
+        </button>
       </div>
     </div>
   );

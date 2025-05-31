@@ -58,9 +58,9 @@ const MessageSidebar = ({ onChatSelect }) => {
   };
 
   return (
-    <div className="w-full max-w-xs h-screen border-r bg-white">
-      <div className="p-5 border-b flex justify-between items-center">
-        <h2 className="text-lg font-semibold">Messages</h2>
+    <div className="w-full max-w-xs h-screen border-r border-gray-600 bg-gray-800 text-white">
+      <div className="p-5 border-b border-gray-600 flex justify-between items-center">
+        <h2 className="text-lg font-semibold text-white">Messages</h2>
         <button className="text-blue-500 text-xl">+</button>
       </div>
 
@@ -68,7 +68,7 @@ const MessageSidebar = ({ onChatSelect }) => {
         <input
           type="text"
           placeholder="search"
-          className="w-full p-2 rounded-md border bg-gray-100 focus:outline-none"
+          className="w-full p-2 rounded-md border border-gray-600 bg-gray-700 text-white focus:outline-none"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
@@ -78,7 +78,7 @@ const MessageSidebar = ({ onChatSelect }) => {
         {filteredChats.map((chat, index) => (
           <div
             key={index}
-            className={`flex items-start gap-3 px-4 py-3 cursor-pointer hover:bg-gray-100 ${chat.active ? 'bg-blue-50 rounded-md' : ''
+            className={`flex items-start gap-3 px-4 py-3 cursor-pointer hover:bg-gray-700 ${chat.active ? 'bg-blue-700 rounded-md' : ''
               }`}
             onClick={() => handleChatClick(chat)}
           >
@@ -89,15 +89,15 @@ const MessageSidebar = ({ onChatSelect }) => {
             />
             <div className="flex-1">
               <div className="flex justify-between items-center">
-                <h4 className="font-semibold text-sm">{chat.name}</h4>
-                <span className="text-xs text-gray-500">{chat.time}</span>
+                <h4 className="font-semibold text-sm text-white">{chat.name}</h4>
+                <span className="text-xs text-gray-400">{chat.time}</span>
               </div>
-              <p className="text-sm text-gray-600 truncate">{chat.msg}</p>
+              <p className="text-sm text-gray-400 truncate">{chat.msg}</p>
               <div className="flex flex-wrap gap-1 mt-1">
                 {chat.tags.map((tag, i) => (
                   <span
                     key={i}
-                    className="text-xs px-2 py-0.5 bg-gray-200 rounded-full text-gray-700"
+                    className="text-xs px-2 py-0.5 bg-gray-700 rounded-full text-white"
                   >
                     {tag}
                   </span>
