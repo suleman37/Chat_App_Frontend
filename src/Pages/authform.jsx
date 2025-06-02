@@ -17,12 +17,12 @@ const AuthForm = () => {
     };
 
     return (
-        <div className="flex min-h-screen items-center justify-center">
+        <div className="flex min-h-screen items-center justify-center bg-gray-900">
             <ToastContainer />
-            <div className="grid grid-cols-1 md:grid-cols-2 bg-white shadow-2xl rounded-2xl overflow-hidden w-full max-w-4xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 bg-gray-800 shadow-2xl rounded-2xl overflow-hidden w-full max-w-4xl">
                 <div className="p-10">
-                    <h2 className="text-3xl font-bold mb-2">Hello!</h2>
-                    <p className="text-sm text-gray-600 mb-6">
+                    <h2 className="text-3xl font-bold text-white mb-2">Hello!</h2>
+                    <p className="text-sm text-gray-400 mb-6">
                         Please {isSignUp ? "signup" : "login"} to continue
                     </p>
                     {isSignUp ? (
@@ -32,9 +32,9 @@ const AuthForm = () => {
                     )}
 
                     <div className="flex items-center my-4">
-                        <hr className="flex-grow border-t border-gray-300" />
+                        <hr className="flex-grow border-t border-gray-600" />
                         <span className="mx-2 text-gray-500">or</span>
-                        <hr className="flex-grow border-t border-gray-300" />
+                        <hr className="flex-grow border-t border-gray-600" />
                     </div>
 
                     <div className="flex justify-center space-x-4 mb-4">
@@ -42,7 +42,7 @@ const AuthForm = () => {
                         <button className="bg-sky-400 text-white px-4 py-2 rounded-full">T</button>
                     </div>
 
-                    <p className="text-sm text-center">
+                    <p className="text-sm text-center text-gray-400">
                         {isSignUp ? "I'm already a member!" : "Don't have an account?"}{" "}
                         <button
                             type="button"
